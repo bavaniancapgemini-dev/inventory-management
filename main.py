@@ -24,7 +24,40 @@ from analytics import (
     total_bills,
     best_selling_products
 )
+from auth import (
+    login,
+    register,
+    view_users,
+    delete_user,
+    change_password
+)
 
+
+print("===== LOGIN =====")
+
+username = input("Username: ")
+
+password = input("Password: ")
+
+user = login(
+
+    username,
+
+    password
+
+)
+
+if user is None:
+
+    print("Invalid Username or Password")
+
+    exit()
+
+role = user[0]
+
+print()
+
+print("Welcome", role)
 
 while True:
 
@@ -44,7 +77,11 @@ while True:
     print("12. Total Customers")
     print("13. Generate Bill")
     print("14. Sales Analytics")
-    print("15. Exit")
+    print("15. Add Cashier")
+    print("16. View Users")
+    print("17. Change Password")
+    print("18. Delete User")
+    print("19. Exit")
 
     choice = input("Choose: ")
 
@@ -145,11 +182,17 @@ while True:
         
     elif choice == "5":
 
-        product_id = int(input("Enter Product ID to Delete: "))
+        if role != "Admin":
 
-        delete_product(product_id)
+            print("Only Admin Can Delete Products")
 
-        print("✅ Product Deleted Successfully")
+        else:
+
+            product_id = int(input("Product ID: "))
+
+            delete_product(product_id)
+
+            print("Product Deleted Successfully")
         
     elif choice == "6":
 
@@ -265,11 +308,17 @@ while True:
         
     elif choice=="11":
 
-        customer_id = int(input("Customer ID: "))
+        if role != "Admin":
 
-        delete_customer(customer_id)
+            print("Only Admin Can Delete Customers")
 
-        print("✅ Customer Deleted Successfully")
+        else:
+
+            customer_id = int(input("Customer ID: "))
+
+            delete_customer(customer_id)
+
+            print("Customer Deleted Successfully")
         
     elif choice=="12":
 
@@ -396,8 +445,71 @@ while True:
             )
 
         print()
+        
+    elif choice=="15":
+
+        if role!="Admin":
+
+            print("Only Admin can add users")
+
+        else:
+
+            username=input("Username: ")
+
+            password=input("Password: ")
+
+            register(
+
+                username,
+
+                password,
+
+                "Cashier"
+            )
+            
+    elif choice=="16":
+
+        users=view_users()
+
+        print()
+
+        print("===== USERS =====")
+
+        for user in users:
+
+            print(user)
+            
+    elif choice=="17":
+
+        username=input("Username: ")
+
+        password=input("New Password: ")
+
+        change_password(
+
+            username,
+
+            password
+
+        )
+
+        print("Password Updated")
+        
+    elif choice=="18":
+
+        if role!="Admin":
+
+            print("Only Admin can delete users")
+
+        else:
+
+            user_id=int(input("User ID: "))
+
+            delete_user(user_id)
+
+            print("User Deleted")
     
-    elif choice == "15":
+    elif choice == "19":
 
         break
 

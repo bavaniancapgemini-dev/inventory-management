@@ -5,6 +5,20 @@ connection = sqlite3.connect("inventory.db")
 cursor = connection.cursor()
 
 cursor.execute("""
+CREATE TABLE IF NOT EXISTS users(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    username TEXT UNIQUE,
+
+    password TEXT,
+
+    role TEXT
+
+)
+""")
+
+cursor.execute("""
 CREATE TABLE IF NOT EXISTS products(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
