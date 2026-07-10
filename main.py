@@ -6,7 +6,10 @@ from database import (
     add_customer,
     view_customers,
     update_customer,
-    delete_customer
+    delete_customer,
+    add_bill,
+    get_product,
+    reduce_stock
 )
 from search import (
      search_product,
@@ -33,7 +36,8 @@ while True:
     print("10. Update Customer")
     print("11. Delete Customer")
     print("12. Total Customers")
-    print("13. Exit")
+    print("13. Generate Bill")
+    print("14. Exit")
 
     choice = input("Choose: ")
 
@@ -271,8 +275,76 @@ while True:
             total_customers()
 
         )
+        
+    elif choice=="13":
 
-    elif choice == "13":
+        customer = input("Customer Name: ")
+
+        product = input("Product Name: ")
+
+        quantity = int(input("Quantity: "))
+
+        data = get_product(product)
+
+        if data is None:
+
+            print("❌ Product Not Found")
+
+        else:
+
+            stock = data[4]      # quantity column
+
+            price = data[3]      # price column
+
+            if quantity > stock:
+
+                print("❌ Not Enough Stock")
+
+            else:
+
+                add_bill(
+
+                    customer,
+
+                    product,
+
+                    quantity,
+
+                    price
+
+                )
+
+                reduce_stock(
+
+                    product,
+
+                    quantity
+
+                )
+
+                total = quantity * price
+
+                print()
+
+                print("===== BILL =====")
+
+                print("Customer :", customer)
+
+                print("Product  :", product)
+
+                print("Price    :", price)
+
+                print("Quantity :", quantity)
+
+                print("------------------------")
+
+                print("TOTAL : ₹", total)
+
+                print()
+
+                print("✅ Bill Generated")
+    
+    elif choice == "14":
 
         break
 

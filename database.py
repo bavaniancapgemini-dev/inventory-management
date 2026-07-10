@@ -30,6 +30,26 @@ CREATE TABLE IF NOT EXISTS customers(
 )
 """)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS bills(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    customer_name TEXT,
+
+    product_name TEXT,
+
+    quantity INTEGER,
+
+    price REAL,
+
+    total REAL,
+
+    bill_date TEXT
+
+)
+""")
+
 connection.commit()
 connection.close()
 
@@ -234,6 +254,94 @@ def delete_customer(customer_id):
         "DELETE FROM customers WHERE id=?",
 
         (customer_id,)
+
+    )
+
+    connection.commit()
+
+    connection.close()
+    
+from datetime import datetime
+
+def add_bill(customer, product, quantity, price):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    total = quantity * price
+
+    cursor.execute(
+        """
+        INSERT INTO bills(
+            customer_name,
+            product_name,
+            quantity,
+            price,
+            total,
+            bill_date
+        )
+        VALUES(?,?,?,?,?,?)
+        """,
+        (
+            customer,
+            product,
+            quantity,
+            price,
+            total,
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+    )
+
+    connection.commit()
+
+    connection.close()
+    
+def get_product(product_name):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        """
+        SELECT *
+        FROM products
+        WHERE name=?
+        """,
+
+        (product_name,)
+
+    )
+
+    product = cursor.fetchone()
+
+    connection.close()
+
+    return product
+
+def reduce_stock(product_name, quantity):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        """
+        UPDATE products
+        SET quantity = quantity - ?
+        WHERE name=?
+        """,
+
+        (
+
+            quantity,
+
+            product_name
+
+        )
 
     )
 
