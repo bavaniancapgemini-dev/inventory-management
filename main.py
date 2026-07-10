@@ -19,6 +19,12 @@ from reports import (
      total_products,
      total_customers
 )
+from analytics import (
+    total_revenue,
+    total_bills,
+    best_selling_products
+)
+
 
 while True:
 
@@ -37,7 +43,8 @@ while True:
     print("11. Delete Customer")
     print("12. Total Customers")
     print("13. Generate Bill")
-    print("14. Exit")
+    print("14. Sales Analytics")
+    print("15. Exit")
 
     choice = input("Choose: ")
 
@@ -283,6 +290,10 @@ while True:
         product = input("Product Name: ")
 
         quantity = int(input("Quantity: "))
+        
+        gst = float(input("GST % : "))
+        
+        discount = float(input("Discount % : "))
 
         data = get_product(product)
 
@@ -302,7 +313,7 @@ while True:
 
             else:
 
-                add_bill(
+                subtotal, gst_amount, discount_amount, grand_total = add_bill(
 
                     customer,
 
@@ -310,7 +321,11 @@ while True:
 
                     quantity,
 
-                    price
+                    price,
+
+                    gst,
+
+                    discount
 
                 )
 
@@ -322,11 +337,9 @@ while True:
 
                 )
 
-                total = quantity * price
-
                 print()
 
-                print("===== BILL =====")
+                print("========== INVOICE ==========")
 
                 print("Customer :", customer)
 
@@ -336,15 +349,55 @@ while True:
 
                 print("Quantity :", quantity)
 
-                print("------------------------")
+                print("-----------------------------")
 
-                print("TOTAL : ₹", total)
+                print(f"Subtotal : ₹{subtotal:.2f}")
 
-                print()
+                print(f"GST      : ₹{gst_amount:.2f}")
 
-                print("✅ Bill Generated")
+                print(f"Discount : ₹{discount_amount:.2f}")
+
+                print("-----------------------------")
+
+                print(f"TOTAL    : ₹{grand_total:.2f}")
+
+                print("=============================")
+                
+    elif choice=="14":
+
+        print()
+
+        print("===== SALES ANALYTICS =====")
+
+        print()
+
+        print("Total Revenue : ₹", total_revenue())
+
+        print("Bills Generated :", total_bills())
+
+        print()
+
+        print("Best Selling Products")
+
+        print("--------------------------")
+
+        for item in best_selling_products():
+
+            print(
+
+                item[0],
+
+                "->",
+
+                item[1],
+
+                "Sold"
+
+            )
+
+        print()
     
-    elif choice == "14":
+    elif choice == "15":
 
         break
 

@@ -43,7 +43,13 @@ CREATE TABLE IF NOT EXISTS bills(
 
     price REAL,
 
-    total REAL,
+    subtotal REAL,
+
+    gst REAL,
+
+    discount REAL,
+
+    grand_total REAL,
 
     bill_date TEXT
 
@@ -263,39 +269,81 @@ def delete_customer(customer_id):
     
 from datetime import datetime
 
-def add_bill(customer, product, quantity, price):
+def add_bill(customer,
+             product,
+             quantity,
+             price,
+             gst,
+             discount):
 
     connection = sqlite3.connect("inventory.db")
 
     cursor = connection.cursor()
 
-    total = quantity * price
+    subtotal = quantity * price
+
+    gst_amount = subtotal * gst / 100
+
+    discount_amount = subtotal * discount / 100
+
+    grand_total = subtotal + gst_amount - discount_amount
 
     cursor.execute(
         """
         INSERT INTO bills(
+
             customer_name,
+
             product_name,
+
             quantity,
+
             price,
-            total,
+
+            subtotal,
+
+            gst,
+
+            discount,
+
+            grand_total,
+
             bill_date
+
         )
-        VALUES(?,?,?,?,?,?)
+
+        VALUES(?,?,?,?,?,?,?,?,?)
         """,
+
         (
+
             customer,
+
             product,
+
             quantity,
+
             price,
-            total,
+
+            subtotal,
+
+            gst_amount,
+
+            discount_amount,
+
+            grand_total,
+
             datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         )
+
     )
 
     connection.commit()
 
     connection.close()
+
+    return subtotal, gst_amount, discount_amount, grand_total
     
 def get_product(product_name):
 
