@@ -14,7 +14,10 @@ from database import (
     view_suppliers,
     update_supplier,
     delete_supplier,
-    search_supplier
+    search_supplier,
+    add_purchase,
+    view_purchases,
+    total_purchase_cost
 )
 from search import (
      search_product,
@@ -91,7 +94,10 @@ while True:
     print("21. Search Supplier")
     print("22. Update Supplier")
     print("23. Delete Supplier")
-    print("24. Exit")
+    print("24. Create Purchase Order")
+    print("25. Purchase History")
+    print("26. Purchase Report")
+    print("27. Exit")
 
     choice = input("Choose: ")
 
@@ -606,8 +612,58 @@ while True:
         delete_supplier(supplier_id)
 
         print("Supplier Deleted")
+        
+    elif choice=="24":
+
+        supplier=input("Supplier Name: ")
+
+        product=input("Product Name: ")
+
+        quantity=int(input("Quantity: "))
+
+        price=float(input("Purchase Price: "))
+
+        add_purchase(
+
+            supplier,
+
+            product,
+
+            quantity,
+
+            price
+
+        )
+
+        print("Purchase Order Created")
+        
+    elif choice=="25":
+
+        purchases=view_purchases()
+
+        print("\n===== PURCHASE HISTORY =====\n")
+
+        for purchase in purchases:
+
+            print(purchase)
+            
+    elif choice=="26":
+
+        print()
+
+        print("===== PURCHASE REPORT =====")
+
+        print()
+
+        print(
+
+            "Total Purchase Cost : ₹",
+
+            total_purchase_cost()
+
+        )
     
-    elif choice == "24":
+    elif choice == "27":
 
         break
 

@@ -88,6 +88,26 @@ CREATE TABLE IF NOT EXISTS suppliers(
 )
 """)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS purchases(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    supplier_name TEXT,
+
+    product_name TEXT,
+
+    quantity INTEGER,
+
+    purchase_price REAL,
+
+    total REAL,
+
+    purchase_date TEXT
+
+)
+""")
+
 connection.commit()
 connection.close()
 
@@ -542,3 +562,115 @@ def search_supplier(keyword):
     connection.close()
 
     return data
+
+from datetime import datetime
+
+def add_purchase(
+
+    supplier,
+
+    product,
+
+    quantity,
+
+    price
+
+):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    total = quantity * price
+
+    date = datetime.now().strftime("%Y-%m-%d")
+
+    cursor.execute(
+        """
+        INSERT INTO purchases(
+
+            supplier_name,
+
+            product_name,
+
+            quantity,
+
+            purchase_price,
+
+            total,
+
+            purchase_date
+
+        )
+
+        VALUES(?,?,?,?,?,?)
+        """,
+        (
+            supplier,
+            product,
+            quantity,
+            price,
+            total,
+            date
+        )
+    )
+
+    cursor.execute(
+        """
+        UPDATE products
+
+        SET quantity = quantity + ?
+
+        WHERE name=?
+        """,
+        (
+            quantity,
+            product
+        )
+    )
+
+    connection.commit()
+
+    connection.close()
+    
+def view_purchases():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+
+        SELECT *
+
+        FROM purchases
+
+        ORDER BY id DESC
+
+    """)
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data
+
+def total_purchase_cost():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+
+        SELECT SUM(total)
+
+        FROM purchases
+
+    """)
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total if total else 0
