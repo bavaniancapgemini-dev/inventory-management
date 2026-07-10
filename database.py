@@ -70,6 +70,24 @@ CREATE TABLE IF NOT EXISTS bills(
 )
 """)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS suppliers(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    company_name TEXT,
+
+    contact_person TEXT,
+
+    phone TEXT,
+
+    email TEXT,
+
+    address TEXT
+
+)
+""")
+
 connection.commit()
 connection.close()
 
@@ -410,3 +428,117 @@ def reduce_stock(product_name, quantity):
     connection.commit()
 
     connection.close()
+    
+def add_supplier(company, contact, phone, email, address):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO suppliers(
+            company_name,
+            contact_person,
+            phone,
+            email,
+            address
+        )
+        VALUES(?,?,?,?,?)
+        """,
+        (
+            company,
+            contact,
+            phone,
+            email,
+            address
+        )
+    )
+
+    connection.commit()
+
+    connection.close()
+    
+def view_suppliers():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM suppliers")
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data
+
+def update_supplier(supplier_id, company, contact, phone, email, address):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        UPDATE suppliers
+        SET
+            company_name=?,
+            contact_person=?,
+            phone=?,
+            email=?,
+            address=?
+        WHERE id=?
+        """,
+        (
+            company,
+            contact,
+            phone,
+            email,
+            address,
+            supplier_id
+        )
+    )
+
+    connection.commit()
+
+    connection.close()
+    
+def delete_supplier(supplier_id):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        "DELETE FROM suppliers WHERE id=?",
+
+        (supplier_id,)
+
+    )
+
+    connection.commit()
+
+    connection.close()
+    
+def search_supplier(keyword):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM suppliers
+        WHERE company_name LIKE ?
+        """,
+        ("%"+keyword+"%",)
+    )
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data

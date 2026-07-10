@@ -9,7 +9,12 @@ from database import (
     delete_customer,
     add_bill,
     get_product,
-    reduce_stock
+    reduce_stock,
+    add_supplier,
+    view_suppliers,
+    update_supplier,
+    delete_supplier,
+    search_supplier
 )
 from search import (
      search_product,
@@ -81,7 +86,12 @@ while True:
     print("16. View Users")
     print("17. Change Password")
     print("18. Delete User")
-    print("19. Exit")
+    print("19. Add Supplier")
+    print("20. View Suppliers")
+    print("21. Search Supplier")
+    print("22. Update Supplier")
+    print("23. Delete Supplier")
+    print("24. Exit")
 
     choice = input("Choose: ")
 
@@ -508,8 +518,96 @@ while True:
             delete_user(user_id)
 
             print("User Deleted")
+            
+    elif choice=="19":
+
+        company=input("Company Name: ")
+
+        contact=input("Contact Person: ")
+
+        phone=input("Phone: ")
+
+        email=input("Email: ")
+
+        address=input("Address: ")
+
+        add_supplier(
+
+            company,
+
+            contact,
+
+            phone,
+
+            email,
+
+            address
+
+        )
+
+        print("Supplier Added Successfully")
+        
+    elif choice=="20":
+
+        suppliers=view_suppliers()
+
+        print("\n===== SUPPLIERS =====\n")
+
+        for supplier in suppliers:
+
+            print(supplier)
+            
+    elif choice=="21":
+
+        keyword=input("Company Name: ")
+
+        suppliers=search_supplier(keyword)
+
+        for supplier in suppliers:
+
+            print(supplier)
+            
+    elif choice=="22":
+
+        supplier_id=int(input("Supplier ID: "))
+
+        company=input("Company: ")
+
+        contact=input("Contact: ")
+
+        phone=input("Phone: ")
+
+        email=input("Email: ")
+
+        address=input("Address: ")
+
+        update_supplier(
+
+            supplier_id,
+
+            company,
+
+            contact,
+
+            phone,
+
+            email,
+
+            address
+
+        )
+
+        print("Supplier Updated")
+        
+    elif choice=="23":
+
+        supplier_id=int(input("Supplier ID: "))
+
+        delete_supplier(supplier_id)
+
+        print("Supplier Deleted")
     
-    elif choice == "19":
+    elif choice == "24":
 
         break
 
