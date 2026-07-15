@@ -108,6 +108,22 @@ CREATE TABLE IF NOT EXISTS purchases(
 )
 """)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS stock_history(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    product_name TEXT,
+
+    action TEXT,
+
+    quantity INTEGER,
+
+    date TEXT
+
+)
+""")
+
 connection.commit()
 connection.close()
 
@@ -390,6 +406,43 @@ def add_bill(customer,
         )
 
     )
+    
+    cursor.execute(
+        """
+        UPDATE products
+        SET quantity = quantity - ?
+        WHERE name = ?
+        """,
+        (
+            quantity,
+            product
+        )
+    )
+    
+    cursor.execute(
+        """
+        INSERT INTO stock_history(
+
+            product_name,
+
+            action,
+
+            quantity,
+
+            date
+
+        )
+
+        VALUES(?,?,?,?)
+
+        """,
+        (
+            product,
+            "Sale",
+            quantity,
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+    )
 
     connection.commit()
 
@@ -628,6 +681,38 @@ def add_purchase(
             product
         )
     )
+    
+    cursor.execute(
+        """
+        INSERT INTO stock_history(
+
+            product_name,
+
+            action,
+
+            quantity,
+
+            date
+
+        )
+
+        VALUES(?,?,?,?)
+
+        """,
+
+        (
+
+            product,
+
+            "Purchase",
+
+            quantity,
+
+            date
+
+        )
+
+    )
 
     connection.commit()
 
@@ -674,3 +759,143 @@ def total_purchase_cost():
     connection.close()
 
     return total if total else 0
+
+def out_of_stock():
+
+    connection=sqlite3.connect("inventory.db")
+
+    cursor=connection.cursor()
+
+    cursor.execute("""
+
+        SELECT *
+
+        FROM products
+
+        WHERE quantity=0
+
+    """)
+
+    data=cursor.fetchall()
+
+    connection.close()
+
+    return data
+
+def low_stock(limit=5):
+
+    connection=sqlite3.connect("inventory.db")
+
+    cursor=connection.cursor()
+
+    cursor.execute("""
+
+        SELECT *
+
+        FROM products
+
+        WHERE quantity<=?
+
+    """,(limit,))
+
+    data=cursor.fetchall()
+
+    connection.close()
+
+    return data
+
+def inventory_value():
+
+    connection=sqlite3.connect("inventory.db")
+
+    cursor=connection.cursor()
+
+    cursor.execute("""
+
+        SELECT SUM(
+
+            quantity*price
+
+        )
+
+        FROM products
+
+    """)
+
+    total=cursor.fetchone()[0]
+
+    connection.close()
+
+    return total if total else 0
+
+def product_history(product):
+
+    connection=sqlite3.connect("inventory.db")
+
+    cursor=connection.cursor()
+
+    cursor.execute("""
+
+        SELECT *
+
+        FROM stock_history
+
+        WHERE product_name=?
+
+    """,(product,))
+
+    data=cursor.fetchall()
+
+    connection.close()
+
+    return data
+
+def category_report():
+
+    connection=sqlite3.connect("inventory.db")
+
+    cursor=connection.cursor()
+
+    cursor.execute("""
+
+        SELECT
+
+            category,
+
+            COUNT(*),
+
+            SUM(quantity)
+
+        FROM products
+
+        GROUP BY category
+
+    """)
+
+    data=cursor.fetchall()
+
+    connection.close()
+
+    return data
+
+def top_selling():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            product_name,
+            SUM(quantity) AS total_sold
+        FROM bills
+        GROUP BY product_name
+        ORDER BY total_sold DESC
+        LIMIT 5
+    """)
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data

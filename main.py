@@ -17,7 +17,13 @@ from database import (
     search_supplier,
     add_purchase,
     view_purchases,
-    total_purchase_cost
+    total_purchase_cost,
+    out_of_stock,
+    low_stock,
+    inventory_value,
+    product_history,
+    category_report,
+    top_selling
 )
 from search import (
      search_product,
@@ -39,6 +45,9 @@ from auth import (
     delete_user,
     change_password
 )
+from reports import *
+
+from utils import title
 
 
 print("===== LOGIN =====")
@@ -97,7 +106,18 @@ while True:
     print("24. Create Purchase Order")
     print("25. Purchase History")
     print("26. Purchase Report")
-    print("27. Exit")
+    print("27. Out of Stock Report")
+    print("28. Low Stock Report")
+    print("29. Inventory Value")
+    print("30. Product Report")
+    print("31. Category Report")
+    print("32. Top Selling Products")
+    print("33. Sales Report")
+    print("34. Purchase Report")
+    print("35. Customer Report")
+    print("36. Product Reports")
+    print("37. Profit Report")
+    print("38. Exit")
 
     choice = input("Choose: ")
 
@@ -662,8 +682,136 @@ while True:
             total_purchase_cost()
 
         )
+        
+    elif choice=="27":
+
+        products=out_of_stock()
+
+        print()
+
+        print("===== OUT OF STOCK =====")
+
+        print()
+
+        for item in products:
+
+            print(item)
+            
+    elif choice=="28":
+
+        products=low_stock()
+
+        print()
+
+        print("===== LOW STOCK =====")
+
+        print()
+
+        for item in products:
+
+            print(item)
+            
+    elif choice=="29":
+
+        print()
+
+        print(
+
+            "Inventory Value : ₹",
+
+            inventory_value()
+
+        )
+        
+    elif choice=="30":
+
+        product=input("Product Name : ")
+
+        history=product_history(product)
+
+        print()
+
+        print("===== STOCK HISTORY =====")
+
+        print()
+
+        for item in history:
+
+            print(item)
+            
+    elif choice=="31":
+
+        report=category_report()
+
+        print()
+
+        print("===== CATEGORY REPORT =====")
+
+        print()
+
+        for item in report:
+
+            print(item)
+            
+    elif choice=="32":
+
+        report=top_selling()
+
+        print()
+
+        print("===== TOP SELLING =====")
+
+        print()
+
+        for item in report:
+
+            print(item)
+            
+    elif choice=="33":
+
+        title("SALES REPORT")
+
+        for item in sales_report():
+
+            print(item)
+            
+    elif choice=="34":
+
+        title("PURCHASE REPORT")
+
+        for item in purchase_report():
+
+            print(item)
+            
+    elif choice=="35":
+
+        title("CUSTOMER REPORT")
+
+        for item in customer_report():
+
+            print(item)
+            
+    elif choice=="36":
+
+        title("PRODUCT REPORT")
+
+        for item in product_report():
+
+            print(item)
+            
+    elif choice=="37":
+
+        title("PROFIT REPORT")
+
+        print(
+
+            "Estimated Profit : ₹",
+
+            profit_report()
+
+        )
     
-    elif choice == "27":
+    elif choice == "38":
 
         break
 
