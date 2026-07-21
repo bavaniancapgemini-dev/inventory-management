@@ -156,6 +156,147 @@ class Dashboard:
             pady=30
         )
         
+        actions = tk.Frame(
+
+            self.right,
+
+            bg=BACKGROUND
+
+        )
+
+        actions.pack(
+
+            pady=25
+        )
+        
+        tk.Button(
+
+            actions,
+
+            text="➕ Add Product",
+
+            width=18,
+
+            height=2,
+
+            bg=SUCCESS,
+
+            fg="white",
+
+            font=("Arial",11,"bold"),
+
+            relief="flat",
+
+            command=self.products
+
+        ).grid(
+
+            row=0,
+
+            column=0,
+
+            padx=15,
+
+            pady=10
+
+        )
+        
+        tk.Button(
+
+            actions,
+
+            text="🧾 Create Bill",
+
+            width=18,
+
+            height=2,
+
+            bg=PRIMARY,
+
+            fg="white",
+
+            font=("Arial",11,"bold"),
+
+            relief="flat",
+
+            command=self.billing
+
+        ).grid(
+
+            row=0,
+
+            column=1,
+
+            padx=15,
+
+            pady=10
+
+        )
+        
+        tk.Button(
+
+            actions,
+
+            text="👥 Add Customer",
+
+            width=18,
+
+            height=2,
+
+            bg=WARNING,
+
+            fg="white",
+
+            font=("Arial",11,"bold"),
+
+            relief="flat",
+
+            command=self.customers
+
+        ).grid(
+
+            row=1,
+
+            column=0,
+
+            padx=15,
+
+            pady=10
+
+        )
+        
+        tk.Button(
+
+            actions,
+
+            text="🚚 Add Supplier",
+
+            width=18,
+
+            height=2,
+
+            bg=DANGER,
+
+            fg="white",
+
+            font=("Arial",11,"bold"),
+
+            relief="flat",
+
+            command=self.suppliers
+
+        ).grid(
+
+            row=1,
+
+            column=1,
+
+            padx=15,
+
+            pady=10
+
+        )
+        
         product_card = tk.Frame(
 
             cards,
