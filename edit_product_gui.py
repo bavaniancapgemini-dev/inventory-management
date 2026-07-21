@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 from database import update_product
+from image_manager import upload_image
 
 class EditProductGUI:
 
@@ -10,6 +11,8 @@ class EditProductGUI:
         self.product = product
 
         self.refresh = refresh
+        
+        self.image = self.product[5]
 
         self.window = tk.Toplevel()
 
@@ -115,6 +118,44 @@ class EditProductGUI:
 
         ).pack(pady=20)
         
+        tk.Button(
+
+            self.window,
+
+            text="Change Image",
+
+            width=20,
+
+            command=self.change_image
+
+        ).pack(pady=10)
+        
+        self.image_label = tk.Label(
+
+            self.window,
+
+            text=self.image if self.image else "No Image Selected",
+
+            fg="blue"
+
+        )
+
+        self.image_label.pack()
+        
+    def change_image(self):
+
+        path = upload_image()
+
+        if path:
+
+            self.image = path
+
+            self.image_label.config(
+
+                text=path
+
+            )
+        
     def update(self):
 
         update_product(
@@ -127,7 +168,9 @@ class EditProductGUI:
 
             float(self.price.get()),
 
-            int(self.quantity.get())
+            int(self.quantity.get()),
+            
+            self.image
 
         )
 

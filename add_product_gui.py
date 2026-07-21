@@ -2,12 +2,15 @@ import tkinter as tk
 from tkinter import messagebox
 
 from database import add_product
+from image_manager import upload_image
 
 class AddProductGUI:
 
     def __init__(self, refresh):
 
         self.refresh = refresh
+        
+        self.image = ""
 
         self.window = tk.Toplevel()
 
@@ -102,6 +105,42 @@ class AddProductGUI:
             command=self.save_product
 
         ).pack(pady=20)
+        
+        tk.Button(
+
+            self.window,
+
+            text="Upload Image",
+
+            width=20,
+
+            command=self.choose_image
+
+        ).pack(pady=10)
+        
+        self.image_label = tk.Label(
+
+            self.window,
+
+            text="No Image Selected",
+
+            fg="blue"
+
+        )
+
+        self.image_label.pack()
+        
+    def choose_image(self):
+
+        self.image = upload_image()
+
+        if self.image:
+
+            self.image_label.config(
+
+                text=self.image
+
+            )
     
     def save_product(self):
 
@@ -121,7 +160,9 @@ class AddProductGUI:
 
             price,
 
-            quantity
+            quantity,
+            
+            self.image
 
         )
 

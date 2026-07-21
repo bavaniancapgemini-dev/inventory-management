@@ -28,6 +28,18 @@ CREATE TABLE IF NOT EXISTS products(
 )
 """)
 
+try:
+
+    cursor.execute(
+
+        "ALTER TABLE products ADD COLUMN image TEXT"
+
+    )
+
+except:
+
+    pass
+
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS customers(
 
@@ -127,7 +139,7 @@ CREATE TABLE IF NOT EXISTS stock_history(
 connection.commit()
 connection.close()
 
-def add_product(name, category, price, quantity):
+def add_product(name, category, price, quantity, image):
 
     connection = sqlite3.connect("inventory.db")
 
@@ -136,18 +148,33 @@ def add_product(name, category, price, quantity):
     cursor.execute(
         """
         INSERT INTO products(
+
             name,
+
             category,
+
             price,
-            quantity
+
+            quantity,
+
+            image
+
         )
-        VALUES(?,?,?,?)
+
+        VALUES(?,?,?,?,?)
         """,
         (
+
             name,
+
             category,
+
             price,
-            quantity
+
+            quantity,
+
+            image
+
         )
     )
 
@@ -200,7 +227,7 @@ def search_product(keyword):
 
     return data
 
-def update_product(product_id, name, category, price, quantity):
+def update_product(product_id, name, category, price, quantity, image):
 
     connection = sqlite3.connect("inventory.db")
 
@@ -210,18 +237,33 @@ def update_product(product_id, name, category, price, quantity):
         """
         UPDATE products
         SET
+
             name=?,
+
             category=?,
+
             price=?,
-            quantity=?
+
+            quantity=?,
+
+            image=?
+
         WHERE id=?
         """,
         (
+
             name,
+
             category,
+
             price,
+
             quantity,
+
+            image,
+
             product_id
+
         )
     )
 
@@ -928,3 +970,64 @@ def top_selling():
     connection.close()
 
     return data
+
+import sqlite3
+
+def total_products():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM products")
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total
+
+
+def total_customers():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM customers")
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total
+
+
+def total_suppliers():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM suppliers")
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total
+
+
+def total_bills():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM bills")
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total

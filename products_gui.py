@@ -8,6 +8,8 @@ from database import (
 )
 from add_product_gui import AddProductGUI
 from edit_product_gui import EditProductGUI
+from PIL import Image
+from PIL import ImageTk
 
 class ProductsGUI:
 
@@ -78,6 +80,38 @@ class ProductsGUI:
             columns=columns,
 
             show="headings"
+
+        )
+        
+        self.image_label = tk.Label(
+
+            self.window,
+
+            text="No Image",
+
+            width=25,
+
+            height=15,
+
+            relief="solid"
+
+        )
+
+        self.image_label.pack(
+
+            side="right",
+
+            padx=20,
+
+            pady=20
+
+        )
+        
+        self.tree.bind(
+
+            "<<TreeviewSelect>>",
+
+            self.show_image
 
         )
 
@@ -261,3 +295,67 @@ class ProductsGUI:
     def delete_selected(self):
 
         pass
+    
+    def show_image(self, event):
+
+        selected = self.tree.focus()
+
+        if not selected:
+
+            return
+
+        values = self.tree.item(selected)["values"]
+
+        products = view_products()
+
+        image_path = ""
+
+        for product in products:
+
+            if product[0] == values[0]:
+
+                image_path = product[5]
+
+                break
+
+        if image_path == "":
+
+            self.image_label.config(
+
+                image="",
+
+                text="No Image"
+
+            )
+
+            return
+
+        try:
+
+            image = Image.open(image_path)
+
+            image = image.resize((180,180))
+
+            photo = ImageTk.PhotoImage(image)
+
+            self.image_label.configure(
+
+                image=photo,
+
+                text=""
+
+            )
+
+            self.image_label.image = photo
+
+        except Exception as e:
+
+            print(e)
+
+            self.image_label.config(
+
+                image="",
+
+                text="Image Not Found"
+
+            )
