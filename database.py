@@ -171,6 +171,35 @@ def view_products():
 
     return products
 
+def search_product(keyword):
+
+    import sqlite3
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        """
+        SELECT *
+
+        FROM products
+
+        WHERE name LIKE ?
+
+        """,
+
+        ("%"+keyword+"%",)
+
+    )
+
+    data = cursor.fetchall()
+
+    connection.close()
+
+    return data
+
 def update_product(product_id, name, category, price, quantity):
 
     connection = sqlite3.connect("inventory.db")
