@@ -3,6 +3,8 @@ from datetime import datetime
 from theme import *
 from database import *
 
+from tkinter import messagebox
+
 from tkinter import ttk
 
 class Dashboard:
@@ -343,6 +345,184 @@ class Dashboard:
 
         ).pack()
         
+        value_card = tk.Frame(
+
+            cards,
+
+            bg="white",
+
+            relief="raised",
+
+            bd=2,
+
+            width=180,
+
+            height=120
+
+        )
+
+        value_card.grid(
+
+            row=0,
+
+            column=1,
+
+            padx=15
+
+        )
+
+        value_card.pack_propagate(False)
+
+        tk.Label(
+
+            value_card,
+
+            text="Inventory Value",
+
+            font=("Arial",13,"bold"),
+
+            bg="white"
+
+        ).pack(pady=10)
+
+        tk.Label(
+
+            value_card,
+
+            text=f"₹ {inventory_value():,.0f}",
+
+            font=("Arial",20,"bold"),
+
+            fg=SUCCESS,
+
+            bg="white"
+
+        ).pack()
+        
+        stock_card = tk.Frame(
+
+            cards,
+
+            bg="white",
+
+            relief="raised",
+
+            bd=2,
+
+            width=180,
+
+            height=120
+
+        )
+
+        stock_card.grid(
+
+            row=0,
+
+            column=2,
+
+            padx=15
+
+        )
+
+        stock_card.pack_propagate(False)
+
+        tk.Label(
+
+            stock_card,
+
+            text="Low Stock",
+
+            font=("Arial",13,"bold"),
+
+            bg="white"
+
+        ).pack(pady=10)
+
+        tk.Label(
+
+            stock_card,
+
+            text=str(low_stock()),
+
+            font=("Arial",22,"bold"),
+
+            fg=DANGER,
+
+            bg="white"
+
+        ).pack()
+        
+        expensive = most_expensive()
+
+        exp_card = tk.Frame(
+
+            cards,
+
+            bg="white",
+
+            relief="raised",
+
+            bd=2,
+
+            width=220,
+
+            height=120
+
+        )
+
+        exp_card.grid(
+
+            row=0,
+
+            column=3,
+
+            padx=15
+
+        )
+
+        exp_card.pack_propagate(False)
+
+        tk.Label(
+
+            exp_card,
+
+            text="Top Product",
+
+            font=("Arial",13,"bold"),
+
+            bg="white"
+
+        ).pack(pady=8)
+
+        if expensive:
+
+            tk.Label(
+
+                exp_card,
+
+                text=expensive[0],
+
+                bg="white",
+
+                font=("Arial",11,"bold")
+
+            ).pack()
+
+            tk.Label(
+
+                exp_card,
+
+                text=f"₹ {expensive[1]:,.2f}",
+
+                fg=PRIMARY,
+
+                bg="white",
+
+                font=("Arial",12)
+
+            ).pack()
+        
         logo = tk.Label(
 
             self.left,
@@ -533,7 +713,9 @@ class Dashboard:
 
     def customers(self):
 
-        print("Customers Module")
+        from customers_gui import CustomersGUI
+        
+        CustomersGUI()
 
     def billing(self):
 

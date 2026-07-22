@@ -1031,3 +1031,226 @@ def total_bills():
     connection.close()
 
     return total
+
+def inventory_value():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+
+        SELECT SUM(price * quantity)
+
+        FROM products
+
+    """)
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total if total else 0
+
+def low_stock():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+
+        SELECT COUNT(*)
+
+        FROM products
+
+        WHERE quantity<=5
+
+    """)
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total
+
+def most_expensive():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+
+        SELECT name,price
+
+        FROM products
+
+        ORDER BY price DESC
+
+        LIMIT 1
+
+    """)
+
+    product = cursor.fetchone()
+
+    connection.close()
+
+    return product
+
+def add_customer(name, phone, email, address):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO customers(
+
+            name,
+
+            phone,
+
+            email,
+
+            address
+
+        )
+
+        VALUES(?,?,?,?)
+        """,
+
+        (
+
+            name,
+
+            phone,
+
+            email,
+
+            address
+
+        )
+
+    )
+
+    connection.commit()
+
+    connection.close()
+    
+def view_customers():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        "SELECT id,name,phone,email FROM customers"
+
+    )
+
+    customers = cursor.fetchall()
+
+    connection.close()
+
+    return customers
+
+def search_customer(keyword):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT id,name,phone,email
+        FROM customers
+        WHERE
+
+            name LIKE ?
+
+            OR phone LIKE ?
+
+            OR email LIKE ?
+        """,
+
+        (
+
+            "%" + keyword + "%",
+
+            "%" + keyword + "%",
+
+            "%" + keyword + "%"
+
+        )
+
+    )
+
+    customers = cursor.fetchall()
+
+    connection.close()
+
+    return customers
+
+def delete_customer(customer_id):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        "DELETE FROM customers WHERE id=?",
+
+        (customer_id,)
+
+    )
+
+    connection.commit()
+
+    connection.close()
+    
+def update_customer(customer_id, name, phone, email, address):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        UPDATE customers
+
+        SET
+
+            name=?,
+
+            phone=?,
+
+            email=?,
+
+            address=?
+
+        WHERE id=?
+        """,
+
+        (
+
+            name,
+
+            phone,
+
+            email,
+
+            address,
+
+            customer_id
+
+        )
+
+    )
+
+    connection.commit()
+
+    connection.close()
