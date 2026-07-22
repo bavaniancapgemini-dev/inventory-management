@@ -723,7 +723,9 @@ class Dashboard:
 
     def suppliers(self):
 
-        print("Suppliers Module")
+        from suppliers_gui import SuppliersGUI
+        
+        SuppliersGUI()
 
     def reports(self):
 

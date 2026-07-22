@@ -1254,3 +1254,80 @@ def update_customer(customer_id, name, phone, email, address):
     connection.commit()
 
     connection.close()
+    
+def add_supplier(company_name,
+                 contact_person,
+                 phone,
+                 email,
+                 address):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO suppliers(
+
+            company_name,
+
+            contact_person,
+
+            phone,
+
+            email,
+
+            address
+
+        )
+
+        VALUES(?,?,?,?,?)
+        """,
+
+        (
+
+            company_name,
+
+            contact_person,
+
+            phone,
+
+            email,
+
+            address
+
+        )
+
+    )
+
+    connection.commit()
+
+    connection.close()
+    
+def view_suppliers():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+
+        SELECT
+
+            id,
+
+            company_name,
+
+            phone,
+
+            email
+
+        FROM suppliers
+
+    """)
+
+    suppliers = cursor.fetchall()
+
+    connection.close()
+
+    return suppliers
