@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+from edit_supplier_gui import EditSupplierGUI
+
+import sqlite3
 
 from database import *
 
@@ -77,6 +80,30 @@ class SuppliersGUI:
             command=self.add_supplier
 
         ).grid(row=0,column=0,padx=10)
+        
+        tk.Button(
+
+            button_frame,
+
+            text="Edit Supplier",
+
+            width=18,
+
+            command=self.edit_supplier
+
+        ).grid(row=0,column=1,padx=10)
+
+        tk.Button(
+
+            button_frame,
+
+            text="Delete Supplier",
+
+            width=18,
+
+            command=self.delete_supplier
+
+        ).grid(row=0,column=2,padx=10)
 
         tk.Button(
 
@@ -88,7 +115,7 @@ class SuppliersGUI:
 
             command=self.load_suppliers
 
-        ).grid(row=0,column=1,padx=10)
+        ).grid(row=0,column=3,padx=10)
 
         columns = (
 
@@ -212,8 +239,26 @@ class SuppliersGUI:
 
     def search_supplier(self):
 
-        pass
+        keyword = self.search.get()
 
+        suppliers = search_supplier(keyword)
+
+        for row in self.tree.get_children():
+
+            self.tree.delete(row)
+
+        for supplier in suppliers:
+
+            self.tree.insert(
+
+                "",
+
+                tk.END,
+
+                values=supplier
+
+            )
+    
     def load_suppliers(self):
 
         for row in self.tree.get_children():
@@ -233,3 +278,77 @@ class SuppliersGUI:
                 values=supplier
 
             )
+            
+    def delete_supplier(self):
+
+        selected = self.tree.focus()
+
+        if not selected:
+
+            messagebox.showwarning(
+
+                "Warning",
+
+                "Please select a supplier."
+
+            )
+
+            return
+
+        values = self.tree.item(selected)["values"]
+
+        answer = messagebox.askyesno(
+
+            "Delete",
+
+            f"Delete {values[1]} ?"
+
+        )
+
+        if answer:
+
+            delete_supplier(values[0])
+
+            self.load_suppliers()
+            
+    def edit_supplier(self):
+
+        selected = self.tree.focus()
+
+        if not selected:
+
+            messagebox.showwarning(
+
+                "Warning",
+
+                "Please select a supplier."
+
+            )
+
+            return
+
+        values = self.tree.item(selected)["values"]
+
+        connection = sqlite3.connect("inventory.db")
+
+        cursor = connection.cursor()
+
+        cursor.execute(
+
+            "SELECT * FROM suppliers WHERE id=?",
+
+            (values[0],)
+
+        )
+
+        supplier = cursor.fetchone()
+
+        connection.close()
+
+        EditSupplierGUI(
+
+            supplier,
+
+            self.load_suppliers
+
+        )

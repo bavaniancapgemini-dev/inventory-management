@@ -1331,3 +1331,129 @@ def view_suppliers():
     connection.close()
 
     return suppliers
+
+def search_supplier(keyword):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+
+            id,
+
+            company_name,
+
+            phone,
+
+            email
+
+        FROM suppliers
+
+        WHERE
+
+            company_name LIKE ?
+
+            OR phone LIKE ?
+
+            OR email LIKE ?
+        """,
+
+        (
+
+            "%" + keyword + "%",
+
+            "%" + keyword + "%",
+
+            "%" + keyword + "%"
+
+        )
+
+    )
+
+    suppliers = cursor.fetchall()
+
+    connection.close()
+
+    return suppliers
+
+def delete_supplier(supplier_id):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        "DELETE FROM suppliers WHERE id=?",
+
+        (supplier_id,)
+
+    )
+
+    connection.commit()
+
+    connection.close()
+    
+def update_supplier(
+
+    supplier_id,
+
+    company_name,
+
+    contact_person,
+
+    phone,
+
+    email,
+
+    address
+
+):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        UPDATE suppliers
+
+        SET
+
+            company_name=?,
+
+            contact_person=?,
+
+            phone=?,
+
+            email=?,
+
+            address=?
+
+        WHERE id=?
+        """,
+
+        (
+
+            company_name,
+
+            contact_person,
+
+            phone,
+
+            email,
+
+            address,
+
+            supplier_id
+
+        )
+
+    )
+
+    connection.commit()
+
+    connection.close()
