@@ -674,6 +674,28 @@ class Dashboard:
             activeforeground="white"
 
         ).grid(row=2,column=0,padx=15,pady=8)
+        
+        tk.Button(
+
+            frame,
+
+            text="Bill History",
+
+            width=20,
+
+            height=2,
+
+            command=self.bill_history,
+
+            bg=PRIMARY,
+
+            fg="white",
+
+            font=("Arial",11,"bold"),
+
+            relief="flat"
+
+        ).grid(row=3,column=0,padx=15,pady=8)
 
         tk.Button(
 
@@ -750,3 +772,9 @@ class Dashboard:
             self.update_clock
 
         )
+    
+    def bill_history(self):
+
+        from bill_history_gui import BillHistoryGUI
+
+        BillHistoryGUI()

@@ -1457,3 +1457,61 @@ def update_supplier(
     connection.commit()
 
     connection.close()
+    
+def get_product(product_name):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        """
+        SELECT *
+
+        FROM products
+
+        WHERE name=?
+        """,
+
+        (product_name,)
+
+    )
+
+    product = cursor.fetchone()
+
+    connection.close()
+
+    return product
+
+def view_bills():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+
+            id,
+
+            customer_name,
+
+            product_name,
+
+            quantity,
+
+            grand_total,
+
+            bill_date
+
+        FROM bills
+
+        ORDER BY id DESC
+    """)
+
+    bills = cursor.fetchall()
+
+    connection.close()
+
+    return bills

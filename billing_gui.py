@@ -156,9 +156,78 @@ class BillingGUI:
         
     def create_bill(self):
 
+        if len(self.items) == 0:
+
+            messagebox.showwarning(
+
+                "Warning",
+
+                "No items added."
+
+            )
+
+            return
+
+        subtotal = 0
+
+        for product_name, quantity in self.items:
+
+            product = get_product(product_name)
+
+            if product:
+
+                price = product[3]
+
+                subtotal += price * int(quantity)
+
+        gst = subtotal * 18 / 100
+
+        discount = subtotal * 5 / 100
+
+        grand_total = subtotal + gst - discount
+        
+        customer = self.customer.get()
+
+        for product_name, quantity in self.items:
+
+            product = get_product(product_name)
+
+            if product:
+
+                add_bill(
+
+                    customer,
+
+                    product_name,
+
+                    int(quantity),
+
+                    product[3],
+
+                    18,
+
+                    5
+
+                )
+
         messagebox.showinfo(
 
-            "Version 28",
+            "Bill Summary",
 
-            "Bill calculation will be added in Version 28.1"
+            f"Subtotal : ₹{subtotal:.2f}\n\n"
+
+            f"GST (18%) : ₹{gst:.2f}\n\n"
+
+            f"Discount (5%) : ₹{discount:.2f}\n\n"
+
+            f"Grand Total : ₹{grand_total:.2f}"
+
         )
+        
+        self.items.clear()
+
+        for row in self.tree.get_children():
+
+            self.tree.delete(row)
+
+        self.customer.delete(0, tk.END)
