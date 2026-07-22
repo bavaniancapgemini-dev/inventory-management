@@ -1515,3 +1515,75 @@ def view_bills():
     connection.close()
 
     return bills
+
+def total_customers():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        "SELECT COUNT(*) FROM customers"
+
+    )
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total
+
+def total_suppliers():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        "SELECT COUNT(*) FROM suppliers"
+
+    )
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total
+
+def total_bills():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        "SELECT COUNT(*) FROM bills"
+
+    )
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total
+
+def total_revenue():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        "SELECT SUM(grand_total) FROM bills"
+
+    )
+
+    total = cursor.fetchone()[0]
+
+    connection.close()
+
+    return total if total else 0

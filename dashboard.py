@@ -171,6 +171,82 @@ class Dashboard:
             pady=25
         )
         
+        analytics = tk.LabelFrame(
+
+            self.right,
+
+            text="Business Analytics",
+
+            font=("Arial",13,"bold"),
+
+            bg=BACKGROUND,
+
+            padx=20,
+
+            pady=20
+
+        )
+
+        analytics.pack(
+
+            fill="x",
+
+            padx=20,
+
+            pady=15
+
+        )
+        
+        tk.Label(
+
+            analytics,
+
+            text=f"👥 Customers : {total_customers()}",
+
+            font=("Arial",12),
+
+            bg=BACKGROUND
+
+        ).grid(row=0,column=0,padx=30,pady=10)
+
+        tk.Label(
+
+            analytics,
+
+            text=f"🚚 Suppliers : {total_suppliers()}",
+
+            font=("Arial",12),
+
+            bg=BACKGROUND
+
+        ).grid(row=0,column=1,padx=30,pady=10)
+
+        tk.Label(
+
+            analytics,
+
+            text=f"🧾 Bills : {total_bills()}",
+
+            font=("Arial",12),
+
+            bg=BACKGROUND
+
+        ).grid(row=1,column=0,padx=30,pady=10)
+
+        tk.Label(
+
+            analytics,
+
+            text=f"💰 Revenue : ₹ {total_revenue():,.2f}",
+
+            font=("Arial",12,"bold"),
+
+            fg=SUCCESS,
+
+            bg=BACKGROUND
+
+        ).grid(row=1,column=1,padx=30,pady=10)
+                
         tk.Button(
 
             actions,
