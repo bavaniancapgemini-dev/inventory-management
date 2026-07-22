@@ -719,8 +719,10 @@ class Dashboard:
 
     def billing(self):
 
-        print("Billing Module")
+        from billing_gui import BillingGUI
 
+        BillingGUI()
+    
     def suppliers(self):
 
         from suppliers_gui import SuppliersGUI
