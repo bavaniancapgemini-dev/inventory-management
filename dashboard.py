@@ -891,7 +891,9 @@ class Dashboard:
 
     def reports(self):
 
-        print("Reports Module")
+        from bill_history_gui import BillHistoryGUI
+        
+        BillHistoryGUI()
         
     def update_clock(self):
 

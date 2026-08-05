@@ -1617,3 +1617,33 @@ def low_stock_products(limit=5):
     connection.close()
 
     return products
+
+def get_all_bills():
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute("""
+
+        SELECT
+
+            customer,
+
+            bill_date,
+
+            SUM(total_price)
+
+        FROM bills
+
+        GROUP BY customer,bill_date
+
+        ORDER BY bill_date DESC
+
+    """)
+
+    bills = cursor.fetchall()
+
+    connection.close()
+
+    return bills
