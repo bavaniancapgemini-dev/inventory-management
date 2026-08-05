@@ -1647,3 +1647,21 @@ def get_all_bills():
     connection.close()
 
     return bills
+
+def delete_bill(bill_id):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+
+        "DELETE FROM bills WHERE id=?",
+
+        (bill_id,)
+
+    )
+
+    connection.commit()
+
+    connection.close()
