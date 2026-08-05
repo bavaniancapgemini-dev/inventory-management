@@ -1587,3 +1587,33 @@ def total_revenue():
     connection.close()
 
     return total if total else 0
+
+def low_stock_products(limit=5):
+
+    connection = sqlite3.connect("inventory.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+
+            name,
+
+            quantity
+
+        FROM products
+
+        WHERE quantity<=?
+
+        ORDER BY quantity ASC
+        """,
+
+        (limit,)
+    )
+
+    products = cursor.fetchall()
+
+    connection.close()
+
+    return products

@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 
 from database import *
+from invoice_generator import generate_invoice
 
 class BillingGUI:
 
@@ -210,17 +211,29 @@ class BillingGUI:
 
                 )
 
+        invoice_file = generate_invoice(
+
+            customer,
+
+            self.items,
+
+            subtotal,
+
+            gst,
+
+            discount,
+
+            grand_total
+
+        )
+
         messagebox.showinfo(
 
-            "Bill Summary",
+            "Bill Created",
 
-            f"Subtotal : ₹{subtotal:.2f}\n\n"
+            f"Bill created successfully!\n\n"
 
-            f"GST (18%) : ₹{gst:.2f}\n\n"
-
-            f"Discount (5%) : ₹{discount:.2f}\n\n"
-
-            f"Grand Total : ₹{grand_total:.2f}"
+            f"Invoice Saved:\n{invoice_file}"
 
         )
         

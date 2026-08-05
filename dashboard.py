@@ -197,6 +197,68 @@ class Dashboard:
 
         )
         
+        low_stock_frame = tk.LabelFrame(
+
+            self.right,
+
+            text="⚠ Low Stock Alerts",
+
+            font=("Arial",13,"bold"),
+
+            bg=BACKGROUND,
+
+            padx=20,
+
+            pady=15
+
+        )
+
+        low_stock_frame.pack(
+
+            fill="x",
+
+            padx=20,
+
+            pady=10
+
+        )
+        
+        products = low_stock_products()
+
+        if len(products) == 0:
+
+            tk.Label(
+
+                low_stock_frame,
+
+                text="No low stock products.",
+
+                bg=BACKGROUND,
+
+                fg="green",
+
+                font=("Arial",11)
+
+            ).pack()
+
+        else:
+
+            for product in products:
+
+                tk.Label(
+
+                    low_stock_frame,
+
+                    text=f"{product[0]}  →  {product[1]} left",
+
+                    bg=BACKGROUND,
+
+                    fg="red",
+
+                    font=("Arial",11)
+
+                ).pack(anchor="w")
+                
         tk.Label(
 
             analytics,
